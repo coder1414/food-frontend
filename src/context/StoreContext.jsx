@@ -8,7 +8,7 @@ const StoreContextProvider = (props) => {
   // easy way to handle the count
 
   const [cartItems, setCartItems] = useState({});
-  const url = "http://localhost:4000";
+  const url = "https://food-backend-62oi.onrender.com/";
 
   const [token, setToken] = useState("");
   const [food_list, setFoodList] = useState([]);
