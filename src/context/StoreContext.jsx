@@ -6,9 +6,8 @@ export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
   // easy way to handle the count
-
   const [cartItems, setCartItems] = useState({});
-  const url = "https://food-backend-62oi.onrender.com/";
+  const url = "https://food-backend-62oi.onrender.com";  // Removed trailing slash
 
   const [token, setToken] = useState("");
   const [food_list, setFoodList] = useState([]);
@@ -20,11 +19,9 @@ const StoreContextProvider = (props) => {
       setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
     }
 
-    // token avialble?
-
     if (token) {
       await axios.post(
-        url + "/api/cart/add",
+        `${url}/api/cart/add`,  // Ensure no double slashes
         { itemId },
         { headers: { token } }
       );
@@ -33,32 +30,14 @@ const StoreContextProvider = (props) => {
 
   const removeFromCart = async (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
-    // to remove data fodd item form data base when hitting minus ,
     if (token) {
       await axios.post(
-        url + "/api/cart/remove",
+        `${url}/api/cart/remove`,  // Ensure no double slashes
         { itemId },
         { headers: { token } }
       );
     }
   };
-
-  // useEffect(() => {
-  //   console.log(cartItems);
-  // }, [cartItems]);
-
-  // to get total of price in cart
-
-  // const getTotalCartAmount = () => {
-  //   let totalAmount = 0;
-  //   for (const item in cartItems) {
-  //     if (cartItems[item] > 0) {
-  //       let itemInfo = food_list.find((product) => product._id === item);
-  //       totalAmount += itemInfo.price * cartItems[item];
-  //     }
-  //   }
-  //   return totalAmount;
-  // };
 
   const getTotalCartAmount = () => {
     let totalAmount = 0;
@@ -74,22 +53,19 @@ const StoreContextProvider = (props) => {
   };
 
   const fetchFoodList = async () => {
-    const response = await axios.get(url + "/api/food/list");
+    const response = await axios.get(`${url}/api/food/list`);  // Ensure no double slashes
     setFoodList(response.data.data);
   };
 
-  // when we load or refres the page the added item should still display not disapear
   const loadCartData = async (token) => {
-    //cal api
     const response = await axios.post(
-      url + "/api/cart/get",
+      `${url}/api/cart/get`,  // Ensure no double slashes
       {},
       { headers: { token } }
     );
-    //save cart data in one variable
     setCartItems(response.data.cartData);
   };
-  // so that we dont get lockout when reload of webpage
+
   useEffect(() => {
     async function loadData() {
       await fetchFoodList();
@@ -121,3 +97,4 @@ const StoreContextProvider = (props) => {
 };
 
 export default StoreContextProvider;
+
